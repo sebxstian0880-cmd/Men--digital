@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Maison | Menú Gourmet Completo</title>
+    <style>
+        :root {
+            --bg-color: #0b0b0b;
+            --card-bg: #161616;
+            --accent-gold: #d4af37;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --success: #25d366;
+            --border: #2a2a2a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Segoe UI', serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 90px; }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(to bottom, #1a1a1a, var(--bg-color));
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            color: var(--accent-gold);
+            font-size: 28px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 5px;
+            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+
+        .category-title {
+            color: var(--accent-gold);
+            font-size: 20px;
+            margin: 25px 0 15px 0;
+            border-left: 3px solid var(--accent-gold);
+            padding-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media(min-width: 600px) {
+            .menu-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .item-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s ease;
+        }
+
+        .item-card:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .item-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .item-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .item-info h3 {
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .item-info p {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-family: 'Segoe UI', sans-serif;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 10px;
+        }
+
+        .price {
+            color: var(--accent-gold);
+            font-weight: bold;
+            font-size: 17px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn-add {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add:active, .btn-add:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        /* Barra flotante del carrito */
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--accent-gold);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .cart-info {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+        }
+
+        .cart-info span {
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        .btn-checkout {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .review-section {
+            margin: 40px auto 20px auto;
+            text-align: center;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .review-section h3 {
+            font-size: 18px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .review-section p {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .btn-review {
+            background: #4285F4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Le Maison</h1>
+        <p>EXPERIENCIA GASTRONÓMICA 5 ESTRELLAS</p>
+    </header>
+
+    <div class="container">
+
+        <!-- COMBOS EXCLUSIVOS -->
+        <div class="category-title">🔥 Combos de la Casa</div>
+        <div class="menu-grid">
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80" alt="Combo Burger Deluxe" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Combo Burger Deluxe</h3>
+                        <p>Burger Doble Carne con queso Cheddar, Papas Trufadas y Jugo Natural a elección.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$15.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Combo Burger Deluxe', 15)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Combo Gourmet Parejas" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Combo Gourmet Parejas</h3>
+                        <p>2 Platos Fuertes (Lomito/Salmón), 1 Entrada a elegir y 2 Bebidas de la casa.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$45.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Combo Gourmet Parejas', 45)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENTRADAS -->
+        <div class="category-title">Entradas de Autor</div>
+        <div class="menu-grid">
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Carpaccio de Lomito" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Carpaccio de Lomito</h3>
+                        <p>Finas láminas de lomito marinadas en aceite de oliva virgen, alcaparras y parmesano.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$12.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Carpaccio de Lomito', 12)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?auto=format&fit=crop&w=600&q=80" alt="Bruschettas al Tartufo" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Bruschettas al Tartufo</h3>
+                        <p>Pan artesanal de masa madre tostado, crema de trufa blanca y burrata fresca.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$10.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Bruschettas al Tartufo', 10)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLATOS FUERTES -->
+        <div class="category-title">Platos Principales</div>
+        <div class="menu-grid">
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=600&q=80" alt="Medallones Rossini" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Medallones Rossini</h3>
+                        <p>Corte fino de lomito en reducción de vino tinto Oporto y puré trufado.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$28.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Medallones Rossini', 28)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80" alt="Salmón en Costra de Pistacho" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Salmón en Costra de Pistacho</h3>
+                        <p>Filete de salmón fresco con costra crujiente de pistachos sobre espárragos.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$24.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Salmón en Costra de Pistacho', 24)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JUGOS Y BEBIDAS -->
+        <div class="category-title">🥤 Jugos Naturales & Bebidas</div>
+        <div class="menu-grid">
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?auto=format&fit=crop&w=600&q=80" alt="Jugo Natural de Naranja" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Jugo de Naranja Cítrico</h3>
+                        <p>100% natural exprimidor al momento, fresco y helado.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$3.50</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Jugo de Naranja', 3.5)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" alt="Limonada Menta y Jengibre" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Limonada Menta & Jengibre</h3>
+                        <p>Refrescante limonada frappé con hojas de menta fresca y un toque picante de jengibre.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$4.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Limonada Menta & Jengibre', 4)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POSTRES -->
+        <div class="category-title">🍰 Postres Exclusivos</div>
+        <div class="menu-grid">
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80" alt="Tiramisu Tradicional" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Tiramisu Tradicional</h3>
+                        <p>Bizcocho savoiardi impregnado en espresso de altura con mascarpone.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$8.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Tiramisu Tradicional', 8)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" alt="Volcán de Chocolate Belga" class="item-img">
+                <div class="item-content">
+                    <div class="item-info">
+                        <h3>Volcán de Chocolate Belga</h3>
+                        <p>Bizcocho tibio con corazón fundido de chocolate amargo 70% cacao y helado.</p>
+                    </div>
+                    <div class="item-footer">
+                        <span class="price">$9.00</span>
+                        <button class="btn-add" onclick="agregarAlCarro('Volcán de Chocolate Belga', 9)">+ Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE CALIFICACIÓN -->
+        <div class="review-section">
+            <h3>⭐ Valora Nuestra Experiencia</h3>
+            <p>Tu opinión es el pilar de nuestra excelencia culinaria.</p>
+            <a href="https://maps.google.com" class="btn-review" target="_blank">Calificar en Google / Maps</a>
+        </div>
+
+    </div>
+
+    <!-- BARRA INFERIOR DE PEDIDO -->
+    <div class="cart-bar">
+        <div class="cart-info">
+            Items: <span id="cart-count">0</span> | Total: <span id="cart-total">$0.00</span>
+        </div>
+        <a id="whatsapp-btn" href="#" class="btn-checkout" onclick="enviarPedidoWhatsApp(event)">
+            Enviar Pedido 📲
+        </a>
+    </div>
+
+    <script>
+        let carrito = [];
+
+        function agregarAlCarro(nombre, precio) {
+            let item = carrito.find(p => p.name === nombre);
+            if (item) {
+                item.qty++;
+            } else {
+                carrito.push({ name: nombre, price: precio, qty: 1 });
+            }
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            let totalItems = 0;
+            let totalPrice = 0;
+
+            carrito.forEach(item => {
+                totalItems += item.qty;
+                totalPrice += (item.price * item.qty);
+            });
+
+            document.getElementById('cart-count').innerText = totalItems;
+            document.getElementById('cart-total').innerText = '$' + totalPrice.toFixed(2);
+        }
+
+        function enviarPedidoWhatsApp(e) {
+            if (carrito.length === 0) {
+                e.preventDefault();
+                alert('Por favor selecciona al menos un plato de nuestro menú antes de ordenar.');
+                return;
+            }
+
+            let mensaje = "Hola, *Le Maison*! 🍷 Deseo realizar el siguiente pedido:%0A%0A";
+            let total = 0;
+
+            carrito.forEach(item => {
+                let subtotal = item.price * item.qty;
+                mensaje += `• ${item.qty}x ${item.name} ($${subtotal.toFixed(2)})%0A`;
+                total += subtotal;
+            });
+
+            mensaje += `%0A*Total a Pagar:* $${total.toFixed(2)}%0A%0AQuedo atento a la confirmación de mi reserva/pedido.`;
+
+            let telefono = "584125952360";
+            let url = `https://wa.me/${telefono}?text=${mensaje}`;
+
+            document.getElementById('whatsapp-btn').href = url;
+        }
+    </script>
+</body>
+</html>
