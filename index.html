@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cakes & Dreams - Repostería Fina & Menú Digital</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            300: '#FDE68A',
+                            400: '#F3E5AB',
+                            500: '#D4AF37',
+                            600: '#AA7C11',
+                        },
+                        roseGold: {
+                            400: '#F7CAC9',
+                            500: '#B76E79',
+                            600: '#8A4952',
+                        },
+                        darkGourmet: '#0B0A0E',
+                        cardBg: 'rgba(22, 20, 29, 0.85)'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <style>
+        /* Animaciones personalizadas */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.25); }
+            50% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.55); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .pulse-glow {
+            animation: pulseGlow 3s infinite;
+        }
+        /* Estilos Glassmorphism */
+        .glass-card {
+            background: rgba(22, 20, 29, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(212, 175, 55, 0.18);
+        }
+        .glass-header {
+            background: rgba(11, 10, 14, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        /* Ocultar barra de scroll pero mantener funcionalidad */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-darkGourmet text-gray-100 font-sans antialiased min-h-screen pb-28 selection:bg-roseGold-500 selection:text-white">
+
+    <!-- 1. PANTALLA DE BIENVENIDA (SPLASH SCREEN / ANIMACIÓN DE ENTRADA) -->
+    <div id="splashScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-darkGourmet px-6 transition-opacity duration-700">
+        <div class="relative mb-6 text-center">
+            <div class="w-32 h-32 rounded-full border-2 border-gold-500/40 flex items-center justify-center pulse-glow mx-auto mb-4 bg-gradient-to-b from-gray-900 to-black">
+                <i class="fa-solid fa-cake-candles text-5xl text-gradient bg-clip-text text-transparent bg-gradient-to-r from-gold-300 via-gold-500 to-roseGold-500"></i>
+            </div>
+            <h1 class="font-serif text-3xl md:text-4xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-roseGold-400 to-gold-500">
+                CAKES & DREAMS
+            </h1>
+            <p class="text-xs uppercase tracking-widest text-gold-400/90 mt-2 font-semibold">Repostería Artesanal & Gourmet</p>
+            <p class="text-xs text-gray-400 mt-1">Postres exclusivos hechos a mano</p>
+        </div>
+
+        <button onclick="closeSplash()" class="mt-4 px-8 py-3.5 rounded-full bg-gradient-to-r from-gold-500 to-roseGold-500 text-darkGourmet font-bold tracking-wide hover:brightness-110 active:scale-95 transition-all duration-200 shadow-lg shadow-gold-500/25 flex items-center gap-2">
+            <span>EXPLORAR MENÚ</span>
+            <i class="fa-solid fa-arrow-right text-sm"></i>
+        </button>
+    </div>
+
+    <!-- 2. NAVEGACIÓN Y ENCABEZADO (HEADER) -->
+    <header class="sticky top-0 z-30 glass-header border-b border-gold-500/15 px-4 py-3">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full border border-gold-500/40 flex items-center justify-center bg-black/60">
+                    <i class="fa-solid fa-crown text-gold-400 text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="font-serif font-bold text-base text-gold-400 leading-tight">Cakes & Dreams</h2>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 text-[10px] text-green-400 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Abierto Ahora
+                        </span>
+                        <span class="text-[10px] text-gray-400">|</span>
+                        <span class="text-[10px] text-amber-300 flex items-center gap-0.5 font-bold">
+                            <i class="fa-solid fa-star text-[9px] text-amber-400"></i> 4.9 (120+)
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accesos rápidos: Ubicación y Teléfono -->
+            <div class="flex items-center gap-2">
+                <a href="https://maps.google.com" target="_blank" title="Ubicación Google Maps" class="w-9 h-9 rounded-full glass-card flex items-center justify-center text-gold-400 hover:text-white border border-gold-500/30">
+                    <i class="fa-solid fa-location-dot"></i>
+                </a>
+                <a href="tel:+584125952360" title="Llamar" class="w-9 h-9 rounded-full glass-card flex items-center justify-center text-roseGold-400 hover:text-white border border-roseGold-500/30">
+                    <i class="fa-solid fa-phone"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+
+        <!-- Banner Promocional Servicio VIP -->
+        <div class="glass-card rounded-2xl p-4 mb-5 border border-gold-500/25 relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-roseGold-500/10 rounded-full blur-xl"></div>
+            <div class="flex items-center justify-between mb-2">
+                <span class="bg-gold-500/20 text-gold-400 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-gold-500/30">
+                    ✨ Experiencia Gourmet
+                </span>
+                <div class="flex gap-2 text-xs text-gray-300 font-medium">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-truck-fast text-roseGold-400"></i> Delivery</span>
+                    <span class="text-gray-600">|</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-store text-gold-400"></i> Pick-up</span>
+                </div>
+            </div>
+            <h3 class="font-serif text-lg font-bold text-white mb-1">Catálogo de Postres de Autor</h3>
+            <p class="text-xs text-gray-300">Pide directamente por WhatsApp con atención inmediata.</p>
+        </div>
+
+        <!-- FILTROS DE CATEGORÍAS (Horizontal Scrollable) -->
+        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-4 sticky top-16 z-20 bg-darkGourmet/95 backdrop-blur-md pt-1">
+            <button onclick="filterCategory('all')" class="cat-btn active px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border transition-all duration-200 bg-gold-500 text-darkGourmet border-gold-500 shadow-md shadow-gold-500/20" data-cat="all">
+                ✨ Todo
+            </button>
+            <button onclick="filterCategory('tortas')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border transition-all duration-200 bg-black/50 text-gray-300 border-gray-800 hover:border-gold-500/50" data-cat="tortas">
+                🎂 Tortas Finas
+            </button>
+            <button onclick="filterCategory('combos')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border transition-all duration-200 bg-black/50 text-gray-300 border-gray-800 hover:border-gold-500/50" data-cat="combos">
+                🎁 Mini Cakes & Combos
+            </button>
+            <button onclick="filterCategory('postres')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border transition-all duration-200 bg-black/50 text-gray-300 border-gray-800 hover:border-gold-500/50" data-cat="postres">
+                🍨 Postres & Chupitos
+            </button>
+            <button onclick="filterCategory('bebidas')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border transition-all duration-200 bg-black/50 text-gray-300 border-gray-800 hover:border-gold-500/50" data-cat="bebidas">
+                ☕ Bebidas & Cafés
+            </button>
+        </div>
+
+        <!-- 3. CATÁLOGO DE PRODUCTOS (GRID) -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Se generará dinámicamente con JS -->
+        </div>
+
+        <!-- 5. SECCIÓN DE UBICACIÓN, HORARIOS Y DELIVERY -->
+        <div class="mt-8 glass-card rounded-2xl p-5 border border-gold-500/20 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                    <i class="fa-solid fa-clock text-lg"></i>
+                </div>
+                <div>
+                    <h4 class="font-serif font-bold text-sm text-white">Horario de Atención</h4>
+                    <p class="text-xs text-green-400 font-medium">🟢 Abierto Ahora (Pedidos 24/7 online)</p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-3 flex items-center justify-between">
+                <div class="flex items-center gap-2 text-xs text-gray-300">
+                    <i class="fa-solid fa-motorcycle text-roseGold-400 text-sm"></i>
+                    <span>Envíos a domicilio disponibles</span>
+                </div>
+                <a href="https://maps.google.com" target="_blank" class="px-3 py-1.5 rounded-xl bg-gold-500/20 border border-gold-500/40 text-gold-400 text-xs font-bold hover:bg-gold-500 hover:text-black transition-all">
+                    Google Maps <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 4. MODAL INTERACTIVO DE DETALLE (CON SLIDER MULTIMEDIA FOTO Y VIDEO) -->
+    <div id="productModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 p-0 sm:p-4">
+        <div class="glass-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border-t border-gold-500/30 overflow-hidden max-h-[92vh] flex flex-col animate-fade-in">
+            
+            <!-- Cabecera del Modal con Desplazamiento Horizontal (Foto HD / Video HD) -->
+            <div class="relative h-64 bg-black overflow-hidden flex-shrink-0">
+                <div id="modalMediaContainer" class="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth">
+                    <!-- Slide 1: Foto HD -->
+                    <div class="w-full h-full flex-shrink-0 snap-center relative">
+                        <img id="modalImg" src="" alt="Producto" class="w-full h-full object-cover">
+                        <div class="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md border border-gold-500/30 text-[10px] text-gold-400 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-image"></i> Foto HD (Desliza para Video 👉)
+                        </div>
+                    </div>
+                    <!-- Slide 2: Video HD Loop -->
+                    <div class="w-full h-full flex-shrink-0 snap-center relative bg-gray-950">
+                        <video id="modalVideo" class="w-full h-full object-cover" loop playsinline muted autoplay>
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-decorating-a-delicious-chocolate-cake-41584-large.mp4" type="video/mp4">
+                            Tu navegador no soporta reproductor de video.
+                        </video>
+                        <div class="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md border border-roseGold-500/30 text-[10px] text-roseGold-400 font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-circle-play text-red-500"></i> Video 360° en vivo
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón de Cerrar Modal -->
+                <button onclick="closeModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/70 border border-gray-700 text-white flex items-center justify-center hover:bg-gold-500 hover:text-black transition-colors z-10">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Contenido del Modal -->
+            <div class="p-5 overflow-y-auto space-y-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span id="modalCategory" class="text-[10px] uppercase font-bold text-roseGold-400 tracking-wider">Categoría</span>
+                        <h3 id="modalTitle" class="font-serif text-2xl font-bold text-white leading-tight">Nombre</h3>
+                        <div id="modalRating" class="flex items-center gap-1 text-amber-400 text-xs mt-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            <span class="text-gray-400 text-[10px] ml-1">(4.9)</span>
+                        </div>
+                    </div>
+                    <span id="modalPrice" class="text-xl font-bold text-gold-400 bg-gold-500/10 border border-gold-500/25 px-3 py-1 rounded-xl">
+                        $0.00
+                    </span>
+                </div>
+
+                <p id="modalDescription" class="text-xs text-gray-300 leading-relaxed font-light">
+                    Descripción del producto.
+                </p>
+
+                <!-- Selección de Tamaño / Porciones -->
+                <div class="border-t border-gray-800 pt-3">
+                    <label class="block text-xs font-semibold text-gold-400 mb-2">Selecciona Tamaño / Porciones:</label>
+                    <div id="sizeOptions" class="grid grid-cols-2 gap-2">
+                        <!-- Generado por JS -->
+                    </div>
+                </div>
+
+                <!-- Selección de Extras Opcionales -->
+                <div class="border-t border-gray-800 pt-3">
+                    <label class="block text-xs font-semibold text-gold-400 mb-2">Extras Opcionales:</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center justify-between p-2.5 rounded-xl border border-gray-800 bg-black/40 text-xs text-gray-300 cursor-pointer">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="extraTopping" onchange="updateModalPrice()" class="accent-gold-500 rounded">
+                                <span>🍓 Topping Extra de Frutos Rojos</span>
+                            </div>
+                            <span class="text-gold-400 font-bold">+$2.00</span>
+                        </label>
+                        <label class="flex items-center justify-between p-2.5 rounded-xl border border-gray-800 bg-black/40 text-xs text-gray-300 cursor-pointer">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="extraBox" onchange="updateModalPrice()" class="accent-gold-500 rounded">
+                                <span>🎁 Empaque Especial de Regalo</span>
+                            </div>
+                            <span class="text-gold-400 font-bold">+$1.00</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Contador de Cantidad y Agregar al Carrito -->
+                <div class="pt-2 flex items-center gap-3">
+                    <div class="flex items-center glass-card rounded-xl border border-gray-700 px-3 py-2">
+                        <button onclick="adjustModalQty(-1)" class="text-gold-400 hover:text-white px-2 py-1"><i class="fa-solid fa-minus"></i></button>
+                        <span id="modalQty" class="mx-3 font-bold text-white text-sm">1</span>
+                        <button onclick="adjustModalQty(1)" class="text-gold-400 hover:text-white px-2 py-1"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+
+                    <button onclick="addModalItemToCart()" class="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-gold-500 to-roseGold-500 text-darkGourmet font-bold text-sm tracking-wide hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-gold-500/20 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>AGREGAR AL CARRITO</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. BARRA FLOTANTE DEL CARRITO -->
+    <div id="cartBar" class="fixed bottom-0 inset-x-0 z-40 p-4 transition-transform duration-300 transform translate-y-full">
+        <div class="max-w-md mx-auto glass-card rounded-2xl p-3 border border-gold-500/40 shadow-2xl flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="toggleCartDrawer()">
+                <div class="relative w-12 h-12 rounded-xl bg-gradient-to-tr from-gold-500 to-roseGold-500 flex items-center justify-center text-darkGourmet text-xl font-bold shadow-md">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold border-2 border-darkGourmet">0</span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-gray-400 uppercase font-semibold">Total estimado</span>
+                    <div id="cartTotal" class="text-lg font-bold text-gold-400">$0.00</div>
+                </div>
+            </div>
+
+            <button onclick="toggleCartDrawer()" class="px-5 py-2.5 rounded-xl bg-gold-500/20 border border-gold-500/50 text-gold-400 hover:bg-gold-500 hover:text-darkGourmet font-bold text-xs tracking-wider transition-all flex items-center gap-2">
+                <span>VER PEDIDO</span>
+                <i class="fa-solid fa-chevron-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- DRAWER / MODAL DEL CARRITO DE COMPRAS -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 p-0 sm:p-4 flex items-end sm:items-center justify-center">
+        <div class="glass-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border-t border-gold-500/30 overflow-hidden max-h-[88vh] flex flex-col animate-fade-in">
+            
+            <div class="p-4 border-b border-gray-800 flex justify-between items-center bg-black/50">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-gold-400"></i>
+                    <h3 class="font-serif font-bold text-white text-lg">Tu Pedido</h3>
+                </div>
+                <button onclick="toggleCartDrawer()" class="w-8 h-8 rounded-full bg-gray-800 text-gray-300 flex items-center justify-center hover:bg-gold-500 hover:text-black transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="cartItemsList" class="p-4 overflow-y-auto flex-1 space-y-3">
+                <!-- Se llena con JS -->
+            </div>
+
+            <div class="p-4 border-t border-gray-800 bg-black/60 space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">Método de Entrega:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center justify-center gap-2 p-2 rounded-xl border border-gold-500/40 bg-gold-500/10 text-gold-400 text-xs font-bold cursor-pointer">
+                            <input type="radio" name="deliveryType" value="Delivery" checked class="accent-gold-500">
+                            <span>🛵 Delivery</span>
+                        </label>
+                        <label class="flex items-center justify-center gap-2 p-2 rounded-xl border border-gray-800 bg-black/30 text-gray-300 text-xs font-bold cursor-pointer">
+                            <input type="radio" name="deliveryType" value="Retiro en Tienda" class="accent-gold-500">
+                            <span>🏬 Retiro en Tienda</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <input type="text" id="clientName" placeholder="Tu Nombre (Opcional)" class="w-full bg-darkGourmet/90 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-gold-500">
+                </div>
+
+                <div class="flex justify-between items-center pt-2 border-t border-gray-800">
+                    <span class="text-xs text-gray-400">Total a Pagar:</span>
+                    <span id="drawerTotal" class="text-xl font-bold text-gold-400">$0.00</span>
+                </div>
+
+                <button onclick="sendOrderToWhatsApp()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-sm tracking-wide hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-green-500/20 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>CONFIRMAR PEDIDO POR WHATSAPP</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CÓDIGO JAVASCRIPT COMPLETO -->
+    <script>
+        // BASE DE DATOS DE PRODUCTOS
+        const PRODUCTS = [
+            {
+                id: 't1',
+                title: 'Torta Red Velvet Supreme',
+                category: 'tortas',
+                badge: 'Más Vendido',
+                rating: 4.9,
+                price: 25.00,
+                img: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?auto=format&fit=crop&w=600&q=80',
+                desc: 'Esponjoso bizcocho terciopelo rojo impregnado en cacao fino, relleno de suave crema de queso mascarpone artesanal y frutos rojos frescos.',
+                sizes: [
+                    { label: 'Mediana (6-8 porciones)', price: 25.00 },
+                    { label: 'Grande (12-15 porciones)', price: 40.00 }
+                ]
+            },
+            {
+                id: 't2',
+                title: 'Marquise Chocolat & Oro',
+                category: 'tortas',
+                badge: 'Recomendado',
+                rating: 5.0,
+                price: 28.00,
+                img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80',
+                desc: 'Intenso pastel de chocolate amargo 70% cacao criollo, capas de dulce de leche gourmet y detalles comestibles dorados.',
+                sizes: [
+                    { label: 'Estándar (8 porciones)', price: 28.00 },
+                    { label: 'Familiar (16 porciones)', price: 48.00 }
+                ]
+            },
+            {
+                id: 'c1',
+                title: 'Combo Celebración VIP',
+                category: 'combos',
+                badge: 'Popular',
+                rating: 4.8,
+                price: 35.00,
+                img: 'https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=600&q=80',
+                desc: 'Incluye 1 Mini Cake personalizada + 4 Macarons surtidos + Caja luxury con lazo decorativo.',
+                sizes: [
+                    { label: 'Combo Completo', price: 35.00 }
+                ]
+            },
+            {
+                id: 'p1',
+                title: 'Mousse de Pistacho & Frambuesa',
+                category: 'postres',
+                badge: 'Nuevo',
+                rating: 4.9,
+                price: 6.50,
+                img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80',
+                desc: 'Mousse cremoso de pistacho siciliano con corazón ácido de coulis de frambuesa sobre sablé crujiente.',
+                sizes: [
+                    { label: 'Porción Individual', price: 6.50 },
+                    { label: 'Dúo (2 unidades)', price: 12.00 }
+                ]
+            },
+            {
+                id: 'p2',
+                title: 'Cheesecake de Maracuyá',
+                category: 'postres',
+                badge: 'Recomendado',
+                rating: 4.7,
+                price: 5.50,
+                img: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80',
+                desc: 'Base crujiente de galleta de mantequilla, crema horneada suave de queso crema y glaseado brillante de maracuyá.',
+                sizes: [
+                    { label: 'Porción Individual', price: 5.50 }
+                ]
+            },
+            {
+                id: 'b1',
+                title: 'Capuchino Artesanal & Canela',
+                category: 'bebidas',
+                badge: 'Especial',
+                rating: 4.8,
+                price: 3.50,
+                img: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=600&q=80',
+                desc: 'Espreso doble concentrado con leche cremada y lluvia fina de canela y cacao orgánico.',
+                sizes: [
+                    { label: 'Taza Mediana (12oz)', price: 3.50 }
+                ]
+            }
+        ];
+
+        // Estado del Carrito
+        let cart = [];
+        let selectedProductForModal = null;
+        let modalSelectedSize = null;
+        let modalQuantity = 1;
+
+        // 1. Splash Screen
+        function closeSplash() {
+            const splash = document.getElementById('splashScreen');
+            splash.classList.add('opacity-0');
+            setTimeout(() => splash.classList.add('hidden'), 700);
+        }
+
+        // 2. Renderizar Productos
+        function renderProducts(category = 'all') {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? PRODUCTS 
+                : PRODUCTS.filter(p => p.category === category);
+
+            filtered.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-2xl overflow-hidden hover:border-gold-500/40 transition-all duration-300 flex flex-col justify-between animate-fade-in group';
+                
+                card.innerHTML = `
+                    <div class="relative h-44 overflow-hidden cursor-pointer" onclick="openModal('${prod.id}')">
+                        <img src="${prod.img}" alt="${prod.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkGourmet via-transparent to-transparent opacity-80"></div>
+                        
+                        <span class="absolute top-2 left-2 bg-roseGold-500/80 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-roseGold-400/40">
+                            ${prod.badge}
+                        </span>
+
+                        <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-gold-400 font-bold text-xs px-2.5 py-1 rounded-full border border-gold-500/30">
+                            $${prod.price.toFixed(2)}
+                        </span>
+
+                        <div class="absolute bottom-2 left-2 flex items-center gap-1 text-[10px] text-gold-400 font-semibold bg-black/50 px-2 py-0.5 rounded-md backdrop-blur-sm">
+                            <i class="fa-solid fa-play text-[8px]"></i> Ver Foto / Video HD
+                        </div>
+                    </div>
+                    <div class="p-3.5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-1 text-amber-400 text-[10px] mb-1">
+                                <i class="fa-solid fa-star"></i>
+                                <span class="text-gray-300 font-bold">${prod.rating}</span>
+                            </div>
+                            <h4 class="font-serif font-bold text-sm text-white mb-1 group-hover:text-gold-400 transition-colors line-clamp-1">${prod.title}</h4>
+                            <p class="text-[11px] text-gray-400 line-clamp-2 leading-relaxed mb-3">${prod.desc}</p>
+                        </div>
+                        <button onclick="openModal('${prod.id}')" class="w-full py-2 rounded-xl bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-bold hover:bg-gold-500 hover:text-darkGourmet transition-all flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Agregar / Ver Detalle</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 3. Filtrar Categorías
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-btn active px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border transition-all duration-200 bg-gold-500 text-darkGourmet border-gold-500 shadow-md shadow-gold-500/20";
+                } else {
+                    btn.className = "cat-btn px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap border transition-all duration-200 bg-black/50 text-gray-300 border-gray-800 hover:border-gold-500/50";
+                }
+            });
+            renderProducts(cat);
+        }
+
+        // 4. Modal Interactivo
+        function openModal(productId) {
+            selectedProductForModal = PRODUCTS.find(p => p.id === productId);
+            if (!selectedProductForModal) return;
+
+            modalQuantity = 1;
+            modalSelectedSize = selectedProductForModal.sizes[0];
+
+            document.getElementById('modalImg').src = selectedProductForModal.img;
+            document.getElementById('modalTitle').innerText = selectedProductForModal.title;
+            document.getElementById('modalCategory').innerText = selectedProductForModal.category;
+            document.getElementById('modalDescription').innerText = selectedProductForModal.desc;
+            document.getElementById('modalQty').innerText = modalQuantity;
+            
+            // Reiniciar checkboxes extras
+            document.getElementById('extraTopping').checked = false;
+            document.getElementById('extraBox').checked = false;
+
+            updateModalPrice();
+            renderSizeOptions();
+
+            const modal = document.getElementById('productModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('productModal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function renderSizeOptions() {
+            const container = document.getElementById('sizeOptions');
+            container.innerHTML = '';
+            
+            selectedProductForModal.sizes.forEach((size) => {
+                const btn = document.createElement('button');
+                const isSelected = modalSelectedSize.label === size.label;
+                
+                btn.className = `p-2.5 rounded-xl text-xs text-left font-medium border transition-all ${
+                    isSelected 
+                        ? 'bg-gold-500/20 border-gold-500 text-gold-400' 
+                        : 'bg-black/30 border-gray-800 text-gray-400 hover:border-gray-700'
+                }`;
+                btn.innerHTML = `
+                    <div class="font-bold">${size.label}</div>
+                    <div class="text-[10px] text-gray-300">$${size.price.toFixed(2)}</div>
+                `;
+                btn.onclick = () => {
+                    modalSelectedSize = size;
+                    renderSizeOptions();
+                    updateModalPrice();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function adjustModalQty(delta) {
+            modalQuantity = Math.max(1, modalQuantity + delta);
+            document.getElementById('modalQty').innerText = modalQuantity;
+            updateModalPrice();
+        }
+
+        function updateModalPrice() {
+            if (!modalSelectedSize) return;
+            let base = modalSelectedSize.price * modalQuantity;
+
+            if (document.getElementById('extraTopping').checked) base += (2.00 * modalQuantity);
+            if (document.getElementById('extraBox').checked) base += (1.00 * modalQuantity);
+
+            document.getElementById('modalPrice').innerText = `$${base.toFixed(2)}`;
+        }
+
+        function addModalItemToCart() {
+            let extras = [];
+            if (document.getElementById('extraTopping').checked) extras.push('Topping Frutos Rojos (+$2)');
+            if (document.getElementById('extraBox').checked) extras.push('Empaque Regalo (+$1)');
+
+            let unitPrice = modalSelectedSize.price;
+            if (document.getElementById('extraTopping').checked) unitPrice += 2.00;
+            if (document.getElementById('extraBox').checked) unitPrice += 1.00;
+
+            const cartItem = {
+                id: `${selectedProductForModal.id}-${modalSelectedSize.label}-${extras.join(',')}`,
+                title: selectedProductForModal.title,
+                sizeLabel: modalSelectedSize.label,
+                extras: extras,
+                unitPrice: unitPrice,
+                quantity: modalQuantity
+            };
+
+            const existingIndex = cart.findIndex(item => item.id === cartItem.id);
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += modalQuantity;
+            } else {
+                cart.push(cartItem);
+            }
+
+            closeModal();
+            updateCartUI();
+        }
+
+        // 5. Carrito UI
+        function updateCartUI() {
+            const cartBar = document.getElementById('cartBar');
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+
+            document.getElementById('cartCount').innerText = totalCount;
+            document.getElementById('cartTotal').innerText = `$${totalPrice.toFixed(2)}`;
+            document.getElementById('drawerTotal').innerText = `$${totalPrice.toFixed(2)}`;
+
+            if (totalCount > 0) {
+                cartBar.classList.remove('translate-y-full');
+            } else {
+                cartBar.classList.add('translate-y-full');
+                closeCartDrawer();
+            }
+
+            renderCartDrawerItems();
+        }
+
+        function renderCartDrawerItems() {
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = '';
+
+            if (cart.length === 0) {
+                list.innerHTML = '<p class="text-center text-xs text-gray-500 py-6">Tu carrito está vacío.</p>';
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'glass-card p-3 rounded-xl flex justify-between items-center border border-gray-800';
+                itemEl.innerHTML = `
+                    <div>
+                        <h5 class="font-serif font-bold text-xs text-white">${item.title}</h5>
+                        <span class="text-[10px] text-roseGold-400 block">${item.sizeLabel}</span>
+                        ${item.extras.length > 0 ? `<span class="text-[9px] text-gray-400 block">+ ${item.extras.join(', ')}</span>` : ''}
+                        <span class="text-xs text-gold-400 font-bold">$${(item.unitPrice * item.quantity).toFixed(2)}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeCartQty(${index}, -1)" class="w-6 h-6 rounded-lg bg-gray-800 text-gold-400 font-bold flex items-center justify-center text-xs hover:bg-gold-500 hover:text-black">-</button>
+                        <span class="text-xs font-bold text-white px-1">${item.quantity}</span>
+                        <button onclick="changeCartQty(${index}, 1)" class="w-6 h-6 rounded-lg bg-gray-800 text-gold-400 font-bold flex items-center justify-center text-xs hover:bg-gold-500 hover:text-black">+</button>
+                    </div>
+                `;
+                list.appendChild(itemEl);
+            });
+        }
+
+        function changeCartQty(index, delta) {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => drawer.classList.remove('opacity-0'), 10);
+            } else {
+                closeCartDrawer();
+            }
+        }
+
+        function closeCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            drawer.classList.add('opacity-0');
+            setTimeout(() => drawer.classList.add('hidden'), 300);
+        }
+
+        // 6. Enviar a WhatsApp
+        function sendOrderToWhatsApp() {
+            if (cart.length === 0) return;
+
+            const phoneNumber = "584125952360"; // Teléfono configurado
+            const clientName = document.getElementById('clientName').value.trim();
+            const deliveryMethod = document.querySelector('input[name="deliveryType"]:checked').value;
+
+            let message = `👑 *NUEVO PEDIDO - CAKES & DREAMS* 👑\n\n`;
+            if (clientName) {
+                message += `👤 *Cliente:* ${clientName}\n`;
+            }
+            message += `🛵 *Método de Entrega:* ${deliveryMethod}\n`;
+            message += `------------------------------------\n`;
+            message += `📜 *DESGLOSE DEL PEDIDO:*\n\n`;
+
+            let totalPrice = 0;
+            cart.forEach((item, i) => {
+                const subtotal = item.unitPrice * item.quantity;
+                totalPrice += subtotal;
+                message += `${i + 1}. *${item.title}*\n`;
+                message += `   • Tamaño: ${item.sizeLabel}\n`;
+                if (item.extras.length > 0) {
+                    message += `   • Extras: ${item.extras.join(', ')}\n`;
+                }
+                message += `   • Cantidad: ${item.quantity}\n`;
+                message += `   • Subtotal: $${subtotal.toFixed(2)}\n\n`;
+            });
+
+            message += `------------------------------------\n`;
+            message += `💰 *TOTAL A PAGAR:* $${totalPrice.toFixed(2)}\n\n`;
+            message += `✨ *Confirmar datos para el envío o retiro.*`;
+
+            const encodedUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(encodedUrl, '_blank');
+        }
+
+        // Iniciar al cargar la ventana
+        window.onload = function() {
+            renderProducts('all');
+        }
+    </script>
+</body>
+</html>
